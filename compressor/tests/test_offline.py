@@ -61,6 +61,15 @@ class OfflineTestCaseMixin(object):
         self.assertEqual(rendered_template, "".join(result) + "\n")
 
 
+class OfflineGenerationWithDBManifestTestCase(OfflineTestCaseMixin, TestCase):
+    templates_dir = "test_block_super"
+    expected_hash = "7c02d201f69d"
+
+    def setUp(self):
+        settings.COMPRESS_DB_MANIFEST = True
+        super(OfflineGenerationWithDBManifestTestCase, self).setUp()
+
+
 class OfflineGenerationBlockSuperTestCase(OfflineTestCaseMixin, TestCase):
     templates_dir = "test_block_super"
     expected_hash = "7c02d201f69d"

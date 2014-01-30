@@ -17,7 +17,10 @@ else:
 
 INSTALLED_APPS = [
     'compressor',
+    'south'
 ]
+
+SOUTH_TESTS_MIGRATE = False
 
 STATIC_URL = '/static/'
 
