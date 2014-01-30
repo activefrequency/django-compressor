@@ -213,8 +213,8 @@ class Compressor(object):
                     mod = import_module(mod_name)
                 except ImportError:
                     return True, CompilerFilter(content, filter_type=self.type,
-                            command=filter_or_command, filename=filename).input(
-                                **kwargs)
+                            command=filter_or_command,
+                            filename=filename).input(**kwargs)
                 try:
                     precompiler_class = getattr(mod, cls_name)
                 except AttributeError:
@@ -222,8 +222,8 @@ class Compressor(object):
                             filter_or_command)
                 else:
                     return True, precompiler_class(content, attrs,
-                            filter_type=self.type, filename=filename).input(
-                                **kwargs)
+                            filter_type=self.type,
+                            filename=filename).input(**kwargs)
         return False, content
 
     def filter(self, content, method, **kwargs):
