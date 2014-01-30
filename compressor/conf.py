@@ -64,6 +64,8 @@ class CompressorConf(AppConf):
     OFFLINE_MANIFEST = 'manifest.json'
     # The Context to be used when TemplateFilter is used
     TEMPLATE_FILTER_CONTEXT = {}
+    # Use the databse for manifest storage
+    DB_MANIFEST = False
 
     class Meta:
         prefix = 'compress'

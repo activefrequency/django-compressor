@@ -3,6 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 from compressor.cache import (cache_get, cache_set, get_offline_hexdigest,
                               get_offline_manifest, get_templatetag_cachekey)
+from compressor.models import ManifestEntries
 from compressor.conf import settings
 from compressor.exceptions import OfflineGenerationError
 from compressor.utils import get_class
@@ -63,13 +64,21 @@ class CompressorMixin(object):
         """
         if self.is_offline_compression_enabled(forced) and not forced:
             key = get_offline_hexdigest(self.get_original_content(context))
-            offline_manifest = get_offline_manifest()
-            if key in offline_manifest:
-                return offline_manifest[key]
+            if settings.DB_MANIFEST:
+                try:
+                    return ManifestEntries.objects.get(key=key).result
+                except ManifestEntries.DoesNotExist:
+                    raise OfflineGenerationError('You have offline compression '
+                        'enabled but key "%s" is missing from offline manifest. '
+                        'You may need to run "python manage.py compress".' % key)
             else:
-                raise OfflineGenerationError('You have offline compression '
-                    'enabled but key "%s" is missing from offline manifest. '
-                    'You may need to run "python manage.py compress".' % key)
+                offline_manifest = get_offline_manifest()
+                if key in offline_manifest:
+                    return offline_manifest[key]
+                else:
+                    raise OfflineGenerationError('You have offline compression '
+                        'enabled but key "%s" is missing from offline manifest. '
+                        'You may need to run "python manage.py compress".' % key)
 
     def render_cached(self, compressor, kind, mode, forced=False):
         """

@@ -26,6 +26,7 @@ except ImportError:
     CachedLoader = None  # noqa
 
 from compressor.cache import get_offline_hexdigest, write_offline_manifest
+from compressor.models import ManifestEntries
 from compressor.conf import settings
 from compressor.exceptions import OfflineGenerationError
 from compressor.templatetags.compress import CompressorNode
@@ -283,7 +284,12 @@ class Command(NoArgsCommand):
                 results.append(result)
                 count += 1
 
-        write_offline_manifest(offline_manifest)
+        if settings.DB_MANIFEST:
+            for key, result in offline_manifest:
+                ManifestEntries.objects.create(key=key, result=result)
+        else:
+            write_offline_manifest(offline_manifest)
+            
 
         log.write("done\nCompressed %d block(s) from %d template(s).\n" %
                   (count, len(compressor_nodes)))
