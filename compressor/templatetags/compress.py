@@ -64,7 +64,7 @@ class CompressorMixin(object):
         """
         if self.is_offline_compression_enabled(forced) and not forced:
             key = get_offline_hexdigest(self.get_original_content(context))
-            if settings.DB_MANIFEST:
+            if settings.COMPRESS_DB_MANIFEST:
                 try:
                     return ManifestEntries.objects.get(key=key).result
                 except ManifestEntries.DoesNotExist:
