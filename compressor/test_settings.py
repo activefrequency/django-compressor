@@ -16,11 +16,8 @@ else:
     DATABASE_ENGINE = 'sqlite3'
 
 INSTALLED_APPS = [
-    'compressor',
-    'south'
+    'compressor'
 ]
-
-SOUTH_TESTS_MIGRATE = False
 
 STATIC_URL = '/static/'
 
