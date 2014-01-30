@@ -285,7 +285,7 @@ class Command(NoArgsCommand):
                 count += 1
 
         if settings.COMPRESS_DB_MANIFEST:
-            for key, result in offline_manifest:
+            for key, result in offline_manifest.iteritems():
                 ManifestEntries.objects.create(key=key, result=result)
         else:
             write_offline_manifest(offline_manifest)
